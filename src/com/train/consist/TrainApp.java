@@ -2,17 +2,18 @@ package com.train.consist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrainApp {
 
-    // Inner class for Goods Bogie
-    static class GoodsBogie {
-        String type;
-        String cargo;
+    // Inner class
+    static class Bogie {
+        String name;
+        int capacity;
 
-        GoodsBogie(String type, String cargo) {
-            this.type = type;
-            this.cargo = cargo;
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
         }
     }
 
@@ -20,27 +21,38 @@ public class TrainApp {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 1: Create goods bogie list
-        List<GoodsBogie> bogieList = new ArrayList<>();
+        // Step 1: Create large dataset
+        List<Bogie> bogieList = new ArrayList<>();
 
-        bogieList.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        bogieList.add(new GoodsBogie("Box", "Coal"));
-        bogieList.add(new GoodsBogie("Flatbed", "Steel"));
-
-        // ❗ Try invalid case:
-        // bogieList.add(new GoodsBogie("Cylindrical", "Coal"));
-
-        // Step 2: Validate safety rules using stream
-        boolean isSafe = bogieList.stream()
-                .allMatch(b ->
-                        !b.type.equals("Cylindrical") || b.cargo.equals("Petroleum")
-                );
-
-        // Step 3: Display result
-        if (isSafe) {
-            System.out.println("\nTrain is SAFETY COMPLIANT ✅");
-        } else {
-            System.out.println("\nTrain is NOT SAFE ❌");
+        for (int i = 0; i < 100000; i++) {
+            bogieList.add(new Bogie("Bogie" + i, i % 100));
         }
+
+        // ---------------- LOOP BASED ----------------
+        long startLoop = System.nanoTime();
+
+        List<Bogie> loopResult = new ArrayList<>();
+        for (Bogie b : bogieList) {
+            if (b.capacity > 50) {
+                loopResult.add(b);
+            }
+        }
+
+        long endLoop = System.nanoTime();
+        long loopTime = endLoop - startLoop;
+
+        // ---------------- STREAM BASED ----------------
+        long startStream = System.nanoTime();
+
+        List<Bogie> streamResult = bogieList.stream()
+                .filter(b -> b.capacity > 50)
+                .collect(Collectors.toList());
+
+        long endStream = System.nanoTime();
+        long streamTime = endStream - startStream;
+
+        // Step 3: Display results
+        System.out.println("\nLoop Time: " + loopTime + " ns");
+        System.out.println("Stream Time: " + streamTime + " ns");
     }
 }
