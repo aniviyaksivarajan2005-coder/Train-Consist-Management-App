@@ -1,17 +1,16 @@
 package com.train.consist;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrainApp {
 
-    // Inner class (Bogie)
+    // Inner class
     static class Bogie {
         String name;
         int capacity;
 
-        // Constructor
         Bogie(String name, int capacity) {
             this.name = name;
             this.capacity = capacity;
@@ -20,24 +19,25 @@ public class TrainApp {
 
     public static void main(String[] args) {
 
-        // UC7: Sorting bogies using Comparator
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 1: Create List
+        // Step 1: Create list
         List<Bogie> bogieList = new ArrayList<>();
 
-        // Step 2: Add bogies
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 60));
         bogieList.add(new Bogie("First Class", 40));
+        bogieList.add(new Bogie("General", 90));
 
-        // Step 3: Sort bogies by capacity
-        bogieList.sort(Comparator.comparingInt(b -> b.capacity));
+        // Step 2: Convert to stream and filter
+        List<Bogie> filteredList = bogieList.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
 
-        // Step 4: Display sorted bogies
-        System.out.println("\nSorted Bogies (by capacity):");
+        // Step 3: Display filtered bogies
+        System.out.println("\nFiltered Bogies (capacity > 60):");
 
-        for (Bogie b : bogieList) {
+        for (Bogie b : filteredList) {
             System.out.println(b.name + " → " + b.capacity + " seats");
         }
     }
