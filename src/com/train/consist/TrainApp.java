@@ -1,7 +1,6 @@
 package com.train.consist;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TrainApp {
@@ -28,17 +27,23 @@ public class TrainApp {
         bogieList.add(new Bogie("AC Chair", 60));
         bogieList.add(new Bogie("First Class", 40));
         bogieList.add(new Bogie("General", 90));
+        bogieList.add(new Bogie("Second Sitting", 100));
 
-        // Step 2: Convert to stream and filter
-        List<Bogie> filteredList = bogieList.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
+        // Step 2: Group bogies (example: High vs Low capacity)
+        Map<String, List<Bogie>> groupedBogies = bogieList.stream()
+                .collect(Collectors.groupingBy(
+                        b -> (b.capacity > 60) ? "High Capacity" : "Low Capacity"
+                ));
 
-        // Step 3: Display filtered bogies
-        System.out.println("\nFiltered Bogies (capacity > 60):");
+        // Step 3: Display grouped data
+        System.out.println("\nGrouped Bogies:");
 
-        for (Bogie b : filteredList) {
-            System.out.println(b.name + " → " + b.capacity + " seats");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("\n" + entry.getKey() + ":");
+
+            for (Bogie b : entry.getValue()) {
+                System.out.println(b.name + " → " + b.capacity + " seats");
+            }
         }
     }
 }
