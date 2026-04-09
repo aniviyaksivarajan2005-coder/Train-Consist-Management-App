@@ -1,37 +1,27 @@
 package com.train.consist;
 
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 
 public class TrainApp {
 
     public static void main(String[] args) {
 
-        // UC4: LinkedList for ordered train consist
+        // UC5: LinkedHashSet (Order + Uniqueness)
         System.out.println("=== Train Consist Management App ===");
 
-        LinkedList<String> trainConsist = new LinkedList<>();
+        LinkedHashSet<String> trainConsist = new LinkedHashSet<>();
 
         // Step 1: Add bogies
         trainConsist.add("Engine");
         trainConsist.add("Sleeper");
-        trainConsist.add("AC");
         trainConsist.add("Cargo");
         trainConsist.add("Guard");
 
-        System.out.println("\nInitial Train Composition:");
-        for (String bogie : trainConsist) {
-            System.out.println(bogie);
-        }
+        // Step 2: Attempt duplicate
+        trainConsist.add("Sleeper"); // Duplicate
 
-        // Step 2: Insert Pantry Car at position 2
-        trainConsist.add(2, "Pantry Car");
-
-        // Step 3: Remove first and last bogies
-        trainConsist.removeFirst();
-        trainConsist.removeLast();
-
-        // Step 4: Display final train
-        System.out.println("\nFinal Train Composition:");
+        // Step 3: Display final formation
+        System.out.println("\nFinal Train Formation:");
         for (String bogie : trainConsist) {
             System.out.println(bogie);
         }
